@@ -1,7 +1,8 @@
 const monthdateday = function(){
 const today = new Date()
-const day = today.getDay()
 const month = today.getMonth()
-return `weekday ${day} date${today} month${month}  `
+return `
+date - ${today}
+month - ${month}th `
 }
 module.exports.monthdateday=monthdateday

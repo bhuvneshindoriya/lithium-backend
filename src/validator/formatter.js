@@ -3,7 +3,10 @@ let trim_string = function(){
     const trim = name.trim()
     const up = name.trim().toUpperCase()
     const lw = name.trim().toLowerCase()
-    return `${up} ${lw} ${trim}`
+    return `
+    this is uppercase--${up}
+    this is lowercase --${lw}
+    this is trim example--${trim}`
     
    
 }
