@@ -1,7 +1,7 @@
 // const aa1 = function(){
 const lodash_chunk=require('lodash')
 const monthsname =["January","February","March","April","May","June","july","August","September","October","November","December"]
-let chunk_arr = lodash_chunk.chunk(monthsname,4)
+let chunk_arr = lodash_chunk.chunk(monthsname,3)
 
 module.exports.chunk_arr=chunk_arr
 
@@ -16,7 +16,8 @@ const A = [1,3,5,7,3,5]
 const B = [2,8,9,11,2,9]
 const C = [11,15,17,19,17]
 const D = [ 12,13,15,19,12]
-const union_arr = lodash_union.union(A,B,C,D)
+const e = [12,15,9,7,6]
+const union_arr = lodash_union.union(A,B,C,D,e)
 module.exports.union_arr=union_arr
 
 const lodash_=require('lodash')
