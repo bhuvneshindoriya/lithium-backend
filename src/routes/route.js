@@ -71,71 +71,82 @@ const router = express.Router();
 // })
 
 
-// let players =
-//    [
-//        {
-//            "name": "manish",
-//            "dob": "1/1/1995",
-//            "gender": "male",
-//            "city": "jalandhar",
-//            "sports": [
-//                "swimming"
-//            ]
-//        },
-//        {
-//            "name": "gopal",
-//            "dob": "1/09/1995",
-//            "gender": "male",
-//            "city": "delhi",
-//            "sports": [
-//                "soccer"
-//            ],
-//        },
-//        {
-//            "name": "lokesh",
-//            "dob": "1/1/1990",
-//            "gender": "male",
-//            "city": "mumbai",
-//            "sports": [
-//                "soccer"
-//            ],
-//        },
-//    ]
+let players =
+   [
+       {
+           "name": "manish",
+           "dob": "1/1/1995",
+           "gender": "male",
+           "city": "jalandhar",
+           "sports": [
+               "swimming"
+           ]
+       },
+       {
+           "name": "gopal",
+           "dob": "1/09/1995",
+           "gender": "male",
+           "city": "delhi",
+           "sports": [
+               "soccer"
+           ],
+       },
+       {
+           "name": "lokesh",
+           "dob": "1/1/1990",
+           "gender": "male",
+           "city": "mumbai",
+           "sports": [
+               "soccer"
+           ],
+       },
+   ]
  
-//    router.post('/players', function (req, res) {
- 
-//        let ply = req.body.data
-//        players.push(ply)
-//        res.send(  { data: players , status: true }  )
-//    })
-//-------------------------- Assignment Consecutive Numbers 1-------------------------------
-   router.get('/sol1',function(req,res){
-    let arr = [1,2,3,5,6,7]
-    let n = arr[arr.length-1]
-    let o = (n*(n+1)/2)
-    let sum = 0
-    for(let i=0;i<arr.length;i++){
-        sum = sum+arr[i]
+   router.post('/players', function (req, res) {
+    let ply = req.body
+    for(let i=0;i<ply.length;i++){
+        let count =0
+        for(let l=0;l<players.length;l++){
+            if(ply[i].name==players[l].name){
+                count++
+            }
+        }
+        if(count==0)
+        {
+            players.push(ply[i])
+        }
+        
     }
-    let missing = o-sum
-    res.send({ key : missing})
-
-   })
-
-//-------------------------- Assignment Consecutive Numbers 2-------------------------------
-
-   router.get('/sol2',function(req,res){
-    let arr = [33,34,35,37,38,39]
-    let a = arr.length+1
-    let b = (arr[arr.length-1])
-    let c = (arr[0])
-    let d = (a*(c+b))/2
-    let num =0
-    for(let i=0;i<arr.length;i++){
-        num = num+arr[i]
-    }
-    let x = (d-num)
-    res.send({x})
-   })
-
+    res.send({data:players,status:true})      
+})
 module.exports = router;
+//-------------------------- Assignment Consecutive Numbers 1-------------------------------
+//    router.get('/sol1',function(req,res){
+//     let arr = [1,2,3,5,6,7]
+//     let n = arr[arr.length-1]
+//     let o = (n*(n+1)/2)
+//     let sum = 0
+//     for(let i=0;i<arr.length;i++){
+//         sum = sum+arr[i]
+//     }
+//     let missing = o-sum
+//     res.send({ key : missing})
+
+//    })
+
+// //-------------------------- Assignment Consecutive Numbers 2-------------------------------
+
+//    router.get('/sol2',function(req,res){
+//     let arr = [33,34,35,37,38,39]
+//     let a = arr.length+1
+//     let b = (arr[arr.length-1])
+//     let c = (arr[0])
+//     let d = (a*(c+b))/2
+//     let num =0
+//     for(let i=0;i<arr.length;i++){
+//         num = num+arr[i]
+//     }
+//     let x = (d-num)
+//     res.send({x})
+//    })
+
