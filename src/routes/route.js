@@ -70,7 +70,7 @@ const router = express.Router();
 //     res.send(  { msg: arr , status: true }  )
 // })
 
-
+//---------------------------post-req player and booking-Assignmen------------------------------//
 let players =
    [
        {
@@ -119,7 +119,7 @@ let players =
     }
     res.send({data:players,status:true})      
 })
-module.exports = router;
+
 //-------------------------- Assignment Consecutive Numbers 1-------------------------------
 //    router.get('/sol1',function(req,res){
 //     let arr = [1,2,3,5,6,7]
@@ -150,3 +150,4 @@ module.exports = router;
 //     res.send({x})
 //    })
 
+module.exports = router;
