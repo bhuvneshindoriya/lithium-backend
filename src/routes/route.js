@@ -5,14 +5,28 @@ const UserController= require("../controllers/userController")
 const BookController= require("../controllers/bookController")
 const commonMW = require ("../middlewares/commonMiddlewares")
 
+
 router.get("/test-me", function (req, res) {
     res.send("My first ever api!")
 })
 
+router.post("/createUser",commonMW.mid5,UserController.user)
+router.get("/get",commonMW.mid5,UserController.basicCode)
+router.get("/falana",commonMW.mid5,UserController.falana)
 
 
 
-router.post("/createBook", BookController.createBook  )
+
+
+
+
+// router.post("/creteUser",UserController.user)
+// router.get("/get",UserController.basicCode)
+// router.get("/falana",UserController.falana)
+
+
+
+//router.post("/createBook", BookController.createBook  )
 
 
 
@@ -48,7 +62,7 @@ router.post("/createBook", BookController.createBook  )
 
 
 
-router.get("/basicRoute", commonMW.mid1, commonMW.mid2, commonMW.mid3, commonMW.mid4, UserController.basicCode)
+//router.get("/basicRoute", commonMW.mid1, commonMW.mid2, commonMW.mid3, commonMW.mid4, UserController.basicCode)
 
 
 
