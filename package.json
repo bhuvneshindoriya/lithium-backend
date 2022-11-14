@@ -1,0 +1,24 @@
+{
+  "name": "lithium",
+  "version": "1.0.0",
+  "description": "first project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sabihak89/lithium.git"
+  },
+  "author": "group2",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sabihak89/lithium/issues"
+  },
+  "homepage": "https://github.com/sabihak89/lithium#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^6.7.2"
+  }
+}
