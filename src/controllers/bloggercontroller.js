@@ -23,31 +23,7 @@ const createblog = async function (req, res) {
     }
 }
 
-const getblogs = async function(req,res){
-    try{
-        let data = req.query
-        const {authorId,category,subcategory,tag}=data
-        if(Object.keys(data).length===0){
-        let blogsdata = await blogModel.find({isDeleted : false,isPublished:true})
-        if(blogsdata.length===0){
-            return res.status(404).send({status:false,msg:"blogs not found"})
-        }
-        else{
-            return res.status(200).send({status:true,data:blogsdata})
-        }}
-        if(Object.keys(data).length>0){
-            let blogsdata2=await blogModel.find({$and:[{isDeleted:false,isPublished:true},{$or:[{authorId:authorId},{category:category},{subcategory:subcategory},{tag:tag}]}]})
-            if(blogsdata2.length===0) return res.status(404).send({status:false,msg:"This blog is not found"})
-            res.status(200).send({status:true,data:blogsdata2})
-        }
-    }
-    catch(error){
-        res.status(500).send({status:false,message:error.message})
-    }
-}
-
-
-const getblogs1=  async function(req,res){
+const getblogs=  async function(req,res){
     try{
         let query = req.query
         const blog = await blogModel.find(query)
@@ -58,12 +34,43 @@ const getblogs1=  async function(req,res){
         if(blog[i].isDeleted==false&&blog[i].isPublished==true){
             return res.status(200).send({status:true,data:blog})
         }
-        }
+        }  
     }
     catch(error){
         return res.status(500).send({status:false,message:error.message})
     }
 } 
-module.exports.getblogs1=getblogs1
+
 module.exports.getblogs=getblogs
 module.exports.createblog = createblog
+
+
+
+
+
+// const getblogs1 = async function(req,res){
+//     try{
+//         let data = req.query
+//         const {authorId,category,subcategory,tag}=data
+//         if(Object.keys(data).length===0){
+//         let blogsdata = await blogModel.find({isDeleted : false,isPublished:true})
+//         if(blogsdata.length===0){
+//             return res.status(404).send({status:false,msg:"blogs not found"})
+//         }
+//         else{
+//             return res.status(200).send({status:true,data:blogsdata})
+//         }}
+//         if(Object.keys(data).length>0){
+//             let blogsdata2=await blogModel.find({$and:[{isDeleted:false,isPublished:true},{$or:[{authorId:authorId},{category:category},{subcategory:subcategory},{tag:tag}]}]})
+//             if(blogsdata2.length===0) return res.status(404).send({status:false,msg:"This blog is not found"})
+//             res.status(200).send({status:true,data:blogsdata2})
+//         }
+//     }
+//     catch(error){
+//         res.status(500).send({status:false,message:error.message})
+//     }
+// }
+
+
+
+//module.exports.getblogs1=getblogs1

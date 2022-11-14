@@ -8,6 +8,12 @@ try{    const data=req.body;
     let {fname,lname,title,email,password}=data
     if(!fname && !lname && !title && !password && !email)return res.status(404).send({status:false,message:"All is mandotary"}) 
 
+    if(!fname) return res.status(400).send({status:false,msg:"fname is required"})
+    if(!lname) return res.status(400).send({status:false,msg:"lname is required"})
+    if(!title) return res.status(400).send({status:false,msg:"title is required"})
+    if(!email) return res.status(400).send({status:false,msg:"email is required"})
+    if(!password) return res.status(400).send({status:false,msg:"password is required"})
+
     let validemail = emailvalidator.validate(email)
     if(!validemail) return res.status(400).send({status:false,msg:"Invalid E-MAIlID"})
     let authorValidEmail= await authorModel.findOne({email:email})
