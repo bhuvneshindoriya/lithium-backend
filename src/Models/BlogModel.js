@@ -46,7 +46,7 @@ const blogschema = new mongoose.Schema(
         default: false
     },
   },  { timestamps:true});
-    module.exports = mongoose.models('Blog',authorSchema);  //blogs
+    module.exports = mongoose.model('Blog',authorSchema);  //blogs
 
 
 
