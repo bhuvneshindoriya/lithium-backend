@@ -1,6 +1,7 @@
 const blogModel = require('../Models/BlogModel')
 const authorModel = require('../Models/AuthorModel')
 //const {isValidObjectId} = require ('mongoose')
+const moment = require('moment')
 
 const createblog = async function (req, res) {
     try {
@@ -26,13 +27,23 @@ const createblog = async function (req, res) {
 const getblogs=  async function(req,res){
     try{
         let query = req.query
-        const blog = await blogModel.find(query)
+        //let bodydata = req.body
+        // let isDeleted=bodydata.isDeleted
+        // let isPublished=bodydata.isPublished
+        const blog = await blogModel.find(query).populate('authorId')
+    
         if(blog.length==0){
             return res.status(404).send({status : false,msg : "No blogs are found"})
         }
         for(let i=0;i<blog.length;i++){
         if(blog[i].isDeleted==false&&blog[i].isPublished==true){
             return res.status(200).send({status:true,data:blog})
+        }
+        else if(blog[i].isDeleted==true&&blog[i].isPublished==true){
+            return res.status(402).send({status:false,msg:"not valid"})
+        }
+        else if(blog[i].isDeleted==true&&blog[i].isPublished==false){
+            return res.status(404).send({status:false,msg:"deleted data"})
         }
         }  
     }
