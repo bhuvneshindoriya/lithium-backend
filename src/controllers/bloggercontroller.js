@@ -26,10 +26,7 @@ const createblog = async function (req, res) {
 
 const getblogs=  async function(req,res){
     try{
-        let query = req.query
-        //let bodydata = req.body
-        // let isDeleted=bodydata.isDeleted
-        // let isPublished=bodydata.isPublished
+        let query = req.que
         const blog = await blogModel.find(query).populate('authorId')
     
         if(blog.length==0){
