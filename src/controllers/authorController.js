@@ -6,7 +6,7 @@ const emailvalidator = require('email-validator')
 const createAuthor= async function(req,res){
 try{    const data=req.body;  
     let {fname,lname,title,email,password}=data
-    if(!fname && !lname && !title && !password && !email) return res.status(404).send({status:false,message:"All is mandotary"}) 
+    if(!fname && !lname && !title && !password && !email)return res.status(404).send({status:false,message:"All is mandotary"}) 
 
     let validemail = emailvalidator.validate(email)
     if(!validemail) return res.status(400).send({status:false,msg:"Invalid E-MAIlID"})

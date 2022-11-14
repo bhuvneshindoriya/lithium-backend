@@ -45,5 +45,25 @@ const getblogs = async function(req,res){
         res.status(500).send({status:false,message:error.message})
     }
 }
+
+
+const getblogs1=  async function(req,res){
+    try{
+        let query = req.query
+        const blog = await blogModel.find(query)
+        if(blog.length==0){
+            return res.status(404).send({status : false,msg : "No blogs are found"})
+        }
+        for(let i=0;i<blog.length;i++){
+        if(blog[i].isDeleted==false&&blog[i].isPublished==true){
+            return res.status(200).send({status:true,data:blog})
+        }
+        }
+    }
+    catch(error){
+        return res.status(500).send({status:false,message:error.message})
+    }
+} 
+module.exports.getblogs1=getblogs1
 module.exports.getblogs=getblogs
 module.exports.createblog = createblog
