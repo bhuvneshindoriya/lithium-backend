@@ -31,7 +31,7 @@ const blogschema = new mongoose.Schema(
 
      DeletedAt:{
         type:Date,
-        default:null
+        //default:null
      },
     
        isDeleted: {
@@ -41,7 +41,7 @@ const blogschema = new mongoose.Schema(
     },
      publishedAt:{
         type: Date,
-        default: null
+       // default: null
      },
 
      isPublished: {
