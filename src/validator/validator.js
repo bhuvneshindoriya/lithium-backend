@@ -15,5 +15,8 @@ const isValidPassword = function (passwordCheck) {
     let pass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,15}$/;
     if (pass.test(passwordCheck)) return true;
   };
+  const isValidTitle =function(title){
+    return ["Mr", "Mrs", "Miss"].indexOf(title) !== -1
+}
 
-module.exports={isValidEmail,isValidString,isValidPassword}
+module.exports={isValidEmail,isValidString,isValidPassword,isValidTitle}
