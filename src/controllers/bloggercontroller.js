@@ -2,9 +2,9 @@ const blogModel = require('../Models/BlogModel')
 const authorModel = require('../Models/AuthorModel')
 const jwt = require('jsonwebtoken')
 const { isValidObjectId } = require('mongoose')
-const {isValidString,isValidEmail,isValidPassword} = require("../validator/validator");
+const { isValidString } = require("../validator/validator");
 
-const createblog = async function (req, res) {
+const createBlog = async function (req, res) {
   try {
     let data = req.body
     let Id = data.authorId
@@ -15,10 +15,10 @@ const createblog = async function (req, res) {
     if (!authorId) return res.status(400).send({ status: false, msg: "authorId is required" })
     if (!category) return res.status(400).send({ status: false, msg: "category is required" })
 
-    if(!isValidString(title)) return res.status(400).send({status:false,msg:"title is not valid"})
-    if(!isValidString(body)) return res.status(400).send({status:false,msg:"body is not valid"})
-    if(!isValidString(category)) return res.status(400).send({status:false,msg:"category is not valid"})
-    
+    if (!isValidString(title)) return res.status(400).send({ status: false, msg: "title is not valid" })
+    if (!isValidString(body)) return res.status(400).send({ status: false, msg: "body is not valid" })
+    if (!isValidString(category)) return res.status(400).send({ status: false, msg: "category is not valid" })
+
     let id = await authorModel.findById(Id)
     if (!id) return res.status(400).send({ status: false, msg: "authorId does not exist" })
     const Authordata = await blogModel.create(data)
@@ -29,7 +29,7 @@ const createblog = async function (req, res) {
   }
 }
 
-const getblogs = async function (req, res) {
+const getBlogs = async function (req, res) {
   try {
     let query = req.query
     const blog = await blogModel.find({
@@ -45,11 +45,7 @@ const getblogs = async function (req, res) {
   }
 }
 
-module.exports.getblogs = getblogs
-module.exports.createblog = createblog
-
-
-const putBlogs = async (req, res) => {
+const updateBlog = async (req, res) => {
   try {
     let blogId = req.params.blogId;
     if (blogId.length == 0)
@@ -60,7 +56,7 @@ const putBlogs = async (req, res) => {
     if (!blog) return res.status(404).send({ msg: "Blog Doesn't Exist" });
     let data = req.body;
     let updatedBlog = await blogModel.findOneAndUpdate(
-      { _id: blogId, isDeleted: false }, //it will check blog is available or not
+      { _id: blogId, isDeleted: false },
       {
         $set: {
           title: data.title,
@@ -81,65 +77,60 @@ const putBlogs = async (req, res) => {
     res.status(500).send({ status: false, msg: err.message });
   }
 };
-module.exports.putBlogs = putBlogs
 
 
-const deleteblogs = async function (req, res) {
+
+const deleteByparams = async function (req, res) {
   try {
     const blogId = req.params.blogId
     const delete1 = await blogModel.findById(blogId)
-    if (!delete1 && isDeleted == true) return res.status(404).send({ status: false, msg: "users not found" })
-    const updated = await blogModel.findOneAndUpdate({ _id: blogId }, { isDeleted: true }, { new: true })
+    if (delete1.isDeleted == true) return res.status(400).send({ status: false, msg: "already deleted" })
+    if (!delete1) return res.status(404).send({ status: false, msg: "users not found" })
+    const updated = await blogModel.findOneAndUpdate({ _id: blogId }, { isDeleted: true, DeletedAt: Date.now() }, { new: true })
 
-    return res.status(200).send({ status: true, data: updated ,isDeleted:Date.now()})
+    return res.status(200).send({ status: true, data: updated })
   }
   catch (error) {
     return res.status(500).send({ status: false, message: error.message })
   }
 }
 
-module.exports.deleteblogs = deleteblogs;
 
-const deleteblogs1 = async function (req, res) {
+
+const deleteBlogQuery = async (req, res) => {
   try {
-    const data = req.query
-    const deleteData = await blogModel.updateMany(
-      { $and: [data, { isDeleted: false }] },
-      { $set: { isDeleted: true } },
-      { new: true})
-    let BlogDelete = deleteData.modifiedCount
-    if (deleteData.modifiedCount == 0) return res.status(404).send({ status: false, msg: "No blog are found for Update" })
-    res.status(200).send({ status: true, msg: "NUmber of blogs deleted are", BlogDelete, DeletedAt: new Date() })
+
+    let checkId = await blogModel.find(req.query).select({ _id: 0, authorId: 1 })
+    if (checkId.length == 0) {
+      return res.status(404).send({ status: false, msg: "No Blog found" })
+    }
+    let count = 0
+    for (let i = 0; i < checkId.length; i++) {
+      if (checkId[i].authorId == req.decoded.authorId) {
+        count++
+      }
+    }
+    if (count == 0) return res.status(404).send({ status: false, msg: "Unauthorised author" })
+
+    const blogs = await blogModel.updateMany({ $and: [{ isDeleted: false, authorId: req.decoded.authorId }, req.query] }, { isDeleted: true, deletedAt: new Date(Date.now()) }, { new: true });
+
+    if (blogs.modifiedCount > 0) {
+      res.status(200).send({
+        status: true,
+        msg: `${blogs.modifiedCount} blog deleted successfully!`
+      })
+    } else {
+      res.status(404).send({
+        status: false,
+        msg: "Blog is already deleted"
+      })
+    }
+  } catch (error) {
+    res.status(500).send({
+      status: false,
+      error: error.message
+    });
   }
-  catch (error) {
-    res.status(500).send({ status: false, msg: error.message })
-  }
-}
+};
 
-module.exports.deleteblogs1 = deleteblogs1
-
-const login = async function (req, res) {
-  try {
-    let data = req.body
-    let { email, password } = data
-
-    if (!data || Object.keys(data) == 0) return res.status(400).send({ status: false, msg: "Data is manditory" })
-    if (!isValidEmail(email)) return res.status(400).send({status:false,msg:"Please enter valid emailId"})
-  
-
-    let x = await authorModel.findOne({ $or: [{ email: email }, { password: password }] })
-    if (x.email !== email) return res.status(400).send({ status: false, msg: "email is not registered" })
-    if(!isValidPassword(password)) return res.status(400).send({status:false,msg:"please enter valid password"})
-    if (x.password !== password) return res.status(400).send({ status: false, msg: "Incorrect password" })
-    let savedata = await authorModel.findOne({ email: email, password: password })
-    let token = jwt.sign({ authorId: savedata._id }, "project1-group2")
-    res.header("x-api-key", token)
-    res.status(200).send({ status: true, token: token })
-  } catch (err) {
-    res.status(500).send({ status: false, msg: err.message })
-  }
-}
-module.exports.login = login
-
-
-
+module.exports={createBlog,getBlogs,updateBlog,deleteByparams,deleteBlogQuery}

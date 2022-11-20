@@ -24,7 +24,6 @@ const authentication = function (req, res, next) {
 const authorisation = async function (req, res, next) {
   try {
     let authorId2 = req.query.authorId;
-    console.log(authorId2);
     let authorLogin_ = req.decoded.authorId;
     let blogId = req.params.blogId
     if (blogId) {
@@ -47,9 +46,7 @@ const authorisation = async function (req, res, next) {
   }
 };
 
-
-module.exports.authentication = authentication;
-module.exports.authorisation = authorisation;
+module.exports={authentication,authorisation}
 
 
 
