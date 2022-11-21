@@ -6,6 +6,6 @@ router.get('/test', function(req,res){
     console.log("succesfully...")
 })
 
-router.post('functionup/colleges',collegesController.functionupColleges)
+router.post('/functionup/colleges',collegesController.createColleges)
 
 module.exports=router
