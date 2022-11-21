@@ -1,7 +1,7 @@
-const collegesModels=require('../models/collegeModel')
+const collegeModel=require('../models/collegeModel')
 
 
-const createColleges= async function(req,res){
+const createCollege= async function(req,res){
     try{
         let data=req.body
         const {name,fullName,logoLink}=data
@@ -9,7 +9,7 @@ const createColleges= async function(req,res){
         if(!fullName) return res.status(400).send({status:false,message:"FullName is required !!!"})
         if(!logoLink) return res.status(400).send({status:false,message:"LogoLink is required !!!"})
        // if(!data && Object.keys(data).length==0) return res.status(404).send({status:false,message:"All is mandotary"})
-        let savedata= await collegesModels.create(data)
+        let savedata= await collegeModel.create(data)
         res.status(201).send({status:true, data:savedata})
     }
     catch(err){
@@ -18,4 +18,4 @@ const createColleges= async function(req,res){
        
 }
 
-module.exports.createColleges=createColleges
+module.exports.createCollege=createCollege

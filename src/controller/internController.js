@@ -1,4 +1,6 @@
 const internModel = require('../models/internModel')
+const collegeModel=require('../models/collegeModel')
+
 
 const createIntern = async function(req,res){
    try {let bodyData = req.body
