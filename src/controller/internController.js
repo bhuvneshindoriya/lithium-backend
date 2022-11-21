@@ -12,12 +12,20 @@ const createIntern = async function(req , res){
     if(!email) return res.status(400).send({ status: false, message: "Email is required !!!" })
     if(!mobile) return res.status(400).send({ status: false, message: "Mobile is required !!!" })
     if(!collegeName) return res.status(400).send({ status: false, message: "College Name is required !!!" })
-    
+
+    let emailCheck = await internModel.findOne({ email : email })
+
+    if(emailCheck) return res.status(400).send({ status : false , message : "Email Id already in use." })
+
+    let mobileCheck = await internModel.findOne({ mobile : mobile })
+
+    if(mobileCheck) return res.status(400).send({ status : false , message : "Mobile number already in use." })
+
     let getCollegeId = await collegeModel.findOne({ name: collegeName })
 
     if(!getCollegeId)  return res.status(404).send({ status: false, message: "College Name not found." })
 
-    bodyData.collegeId = getCollegeId["_id"]
+    bodyData.collegeId = getCollegeId._id
 
     let internData = await internModel.create(bodyData)
 
