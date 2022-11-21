@@ -11,4 +11,6 @@ router.post('/functionup/interns',internController.createIntern)
 
 router.post('/functionup/colleges',collegeController.createCollege)
 
+router.get('/functionup/collegeDetails',collegeController.getCollegeData)
+
 module.exports=router
