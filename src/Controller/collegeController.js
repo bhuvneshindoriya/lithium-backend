@@ -1,5 +1,6 @@
 const collegeModel = require('../models/collegeModel')
 const internModel = require('../models/internModel')
+const { isValidString , nameValidation , mobileValidation,logolinkvalidator } = require('../Validator/validator')
 
 const createCollege = async function(req , res){
 
@@ -9,8 +10,12 @@ const createCollege = async function(req , res){
     const { name, fullName, logoLink } = data
 
     if(!name) return res.status(400).send({ status: false, message: "Name is required !!!" })
+    if(!isValidString(name)) return res.status(400).send({ status: false, message: "Name is required !!!" })
     if(!fullName) return res.status(400).send({ status: false, message: "FullName is required !!!" })
+    if(!isValidString(fullName)) return res.status(400).send({ status: false, message: "FullName is required !!!" })
     if(!logoLink) return res.status(400).send({ status: false, message: "LogoLink is required !!!" })
+    if(!isValidString(logoLink)) return res.status(400).send({ status: false, message: "LogoLink is required !!!" })
+    if(!logolinkvalidator(logoLink)) return res.status(400).send({ status: false, message: "LogoLink is invalid !!!" })
 
     let nameCheck = await collegeModel.findOne({ name : name })
 
@@ -42,6 +47,9 @@ const getCollegeData = async function(req , res){
     let collegeId = getCollegeData._id
 
     let dataOfInterns = await internModel.find({ collegeId : collegeId , isDeleted : false }).select({ name : 1 , email : 1 , mobile : 1 })
+
+    if(dataOfInterns.length == 0) dataOfInterns = "No intern data available."
+    
 
     let collegeDetails = {
         name : getCollegeData.name,

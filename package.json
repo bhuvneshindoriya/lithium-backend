@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/kfarzan13/Project-2-Open-to-Intern#readme",
   "dependencies": {
+    "email-validator": "^2.0.4",
     "express": "^4.18.2",
     "mongoose": "^6.7.2",
     "nodemon": "^2.0.20"

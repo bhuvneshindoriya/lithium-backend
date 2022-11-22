@@ -1,5 +1,7 @@
 const internModel = require('../models/internModel')
 const collegeModel = require('../models/collegeModel')
+const emailValidator = require('email-validator')
+const { isValidString , nameValidation , mobileValidation } = require('../Validator/validator')
 
 const createIntern = async function(req , res){
 
@@ -9,9 +11,17 @@ const createIntern = async function(req , res){
     let { name, email, mobile, collegeName } = bodyData
 
     if(!name) return res.status(400).send({ status: false, message: "Name is required !!!" })
+    if(!isValidString(name)) return res.status(400).send({ status: false, message: "Name is required !!!" })
     if(!email) return res.status(400).send({ status: false, message: "Email is required !!!" })
     if(!mobile) return res.status(400).send({ status: false, message: "Mobile is required !!!" })
     if(!collegeName) return res.status(400).send({ status: false, message: "College Name is required !!!" })
+    if(!isValidString(collegeName)) return res.status(400).send({ status: false, message: "College Name is required !!!" })
+
+    if(!nameValidation(name)) return res.status(400).send({ status : false , message : "Name is invalid." })
+
+    if(!mobileValidation(mobile)) return res.status(400).send({ status : false , message : "Mobile number is invalid." })
+
+    if(!emailValidator.validate(email)) return res.status(400).send({ status : false , message : "Email id is invalid." })
 
     let emailCheck = await internModel.findOne({ email : email })
 
