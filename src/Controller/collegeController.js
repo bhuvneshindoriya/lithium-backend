@@ -1,6 +1,6 @@
 const collegeModel = require('../models/collegeModel')
 const internModel = require('../models/internModel')
-const { isValidString , nameValidation , mobileValidation,logolinkvalidator } = require('../Validator/validator')
+const { isValidString , abbrValidation , logoLinkValidator } = require('../Validator/validator')
 
 const createCollege = async function(req , res){
 
@@ -9,17 +9,20 @@ const createCollege = async function(req , res){
     let data = req.body
     const { name, fullName, logoLink } = data
 
-    if(!name) return res.status(400).send({ status: false, message: "Name is required !!!" })
-    if(!isValidString(name)) return res.status(400).send({ status: false, message: "Name is required !!!" })
-    if(!fullName) return res.status(400).send({ status: false, message: "FullName is required !!!" })
-    if(!isValidString(fullName)) return res.status(400).send({ status: false, message: "FullName is required !!!" })
-    if(!logoLink) return res.status(400).send({ status: false, message: "LogoLink is required !!!" })
-    if(!isValidString(logoLink)) return res.status(400).send({ status: false, message: "LogoLink is required !!!" })
-    if(!logolinkvalidator(logoLink)) return res.status(400).send({ status: false, message: "LogoLink is invalid !!!" })
+    if(!name) return res.status(400).send({ status: false, message: "College Name is required !!!" })
+    if(!isValidString(name)) return res.status(400).send({ status: false, message: "College Name is required !!!" })
+    if(!abbrValidation(name)) return res.status(400).send({ status : false , message : "College Name is invalid !!!" })
 
     let nameCheck = await collegeModel.findOne({ name : name })
 
-    if(nameCheck) return res.status(400).send({ status : false , message : "Name already in use." })
+    if(nameCheck) return res.status(400).send({ status : false , message : "College Name already in use." })
+
+    if(!fullName) return res.status(400).send({ status: false, message: "FullName is required !!!" })
+    if(!isValidString(fullName)) return res.status(400).send({ status: false, message: "FullName is invalid !!!" })
+
+    if(!logoLink) return res.status(400).send({ status: false, message: "LogoLink is required !!!" })
+    if(!isValidString(logoLink)) return res.status(400).send({ status: false, message: "LogoLink is required !!!" })
+    if(!logoLinkValidator(logoLink)) return res.status(400).send({ status: false, message: "LogoLink is invalid !!!" })
 
     let savedData = await collegeModel.create(data)
     res.status(201).send({ status: true, data: savedData })
@@ -38,7 +41,8 @@ const getCollegeData = async function(req , res){
 
     if(Object.keys(filter).length == 0) return res.status(400).send({ status: false, message: "Filters are required !!!" })
 
-    if(!collegeName) return res.status(400).send({ status: false, message: "CollegeName is required !!!" })
+    if(!collegeName) return res.status(400).send({ status: false, message: "College Name is required !!!" })
+    if(!isValidString(collegeName)) return res.status(400).send({ status: false, message: "College Name is required !!!" })
 
     let getCollegeData = await collegeModel.findOne({ name : collegeName , isDeleted : false }).select({ name : 1 , fullName : 1 , logoLink : 1 })
 
@@ -49,7 +53,6 @@ const getCollegeData = async function(req , res){
     let dataOfInterns = await internModel.find({ collegeId : collegeId , isDeleted : false }).select({ name : 1 , email : 1 , mobile : 1 })
 
     if(dataOfInterns.length == 0) dataOfInterns = "No intern data available."
-    
 
     let collegeDetails = {
         name : getCollegeData.name,

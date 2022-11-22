@@ -12,24 +12,22 @@ const createIntern = async function(req , res){
 
     if(!name) return res.status(400).send({ status: false, message: "Name is required !!!" })
     if(!isValidString(name)) return res.status(400).send({ status: false, message: "Name is required !!!" })
+    if(!nameValidation(name)) return res.status(400).send({ status : false , message : "Name is invalid !!!" })
+
     if(!email) return res.status(400).send({ status: false, message: "Email is required !!!" })
-    if(!mobile) return res.status(400).send({ status: false, message: "Mobile is required !!!" })
-    if(!collegeName) return res.status(400).send({ status: false, message: "College Name is required !!!" })
-    if(!isValidString(collegeName)) return res.status(400).send({ status: false, message: "College Name is required !!!" })
-
-    if(!nameValidation(name)) return res.status(400).send({ status : false , message : "Name is invalid." })
-
-    if(!mobileValidation(mobile)) return res.status(400).send({ status : false , message : "Mobile number is invalid." })
-
-    if(!emailValidator.validate(email)) return res.status(400).send({ status : false , message : "Email id is invalid." })
+    if(!emailValidator.validate(email)) return res.status(400).send({ status : false , message : "Email id is invalid !!!" })
 
     let emailCheck = await internModel.findOne({ email : email })
-
     if(emailCheck) return res.status(400).send({ status : false , message : "Email Id already in use." })
 
-    let mobileCheck = await internModel.findOne({ mobile : mobile })
+    if(!mobile) return res.status(400).send({ status: false, message: "Mobile is required !!!" })
+    if(!mobileValidation(mobile)) return res.status(400).send({ status : false , message : "Mobile number is invalid !!!" })
 
+    let mobileCheck = await internModel.findOne({ mobile : mobile })
     if(mobileCheck) return res.status(400).send({ status : false , message : "Mobile number already in use." })
+
+    if(!collegeName) return res.status(400).send({ status: false, message: "College Name is required !!!" })
+    if(!isValidString(collegeName)) return res.status(400).send({ status: false, message: "College Name is required !!!" })
 
     let getCollegeId = await collegeModel.findOne({ name: collegeName })
 
