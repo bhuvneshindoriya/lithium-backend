@@ -1,9 +1,10 @@
+//const { query } = require('express')
 const collegeModel = require('../models/collegeModel')
 const internModel = require('../models/internModel')
-const { isValidString , abbrValidation , logoLinkValidator } = require('../Validator/validator')
+const { isValidString , collegenameValidation , logoLinkValidator } = require('../Validator/validator')
 
 const createCollege = async function(req , res){
-
+    res.setHeader('Access-Control-Allow-Origin','*')
     try{
 
     let data = req.body
@@ -11,7 +12,7 @@ const createCollege = async function(req , res){
 
     if(!name) return res.status(400).send({ status: false, message: "College Name is required !!!" })
     if(!isValidString(name)) return res.status(400).send({ status: false, message: "College Name is required !!!" })
-    if(!abbrValidation(name)) return res.status(400).send({ status : false , message : "College Name is invalid !!!" })
+   if(!collegenameValidation(name)) return res.status(400).send({ status : false , message : "College Name is invalid !!!" })
 
     let nameCheck = await collegeModel.findOne({ name : name })
 
@@ -21,7 +22,7 @@ const createCollege = async function(req , res){
     if(!isValidString(fullName)) return res.status(400).send({ status: false, message: "FullName is invalid !!!" })
 
     if(!logoLink) return res.status(400).send({ status: false, message: "LogoLink is required !!!" })
-    if(!isValidString(logoLink)) return res.status(400).send({ status: false, message: "LogoLink is required !!!" })
+    ///if(!isValidString(logoLink)) return res.status(400).send({ status: false, message: "LogoLink is required !!!" })
     if(!logoLinkValidator(logoLink)) return res.status(400).send({ status: false, message: "LogoLink is invalid !!!" })
 
     let savedData = await collegeModel.create(data)
@@ -35,7 +36,7 @@ const createCollege = async function(req , res){
 const getCollegeData = async function(req , res){
 
     try {
-
+        res.setHeader('Access-Control-Allow-Origin','*')
     let filter = req.query
     let { collegeName } = filter
 
@@ -68,4 +69,14 @@ const getCollegeData = async function(req , res){
     }
 }
 
-module.exports = { createCollege , getCollegeData }
+module.exports= { createCollege , getCollegeData }
+
+
+// const isValidEmail = function (mail) {
+//     if (/^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/.test(mail)) {
+//       return true;
+//     }
+//   }
+
+
+

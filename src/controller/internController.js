@@ -1,13 +1,14 @@
-const internModel = require('../models/internModel')
-const collegeModel = require('../models/collegeModel')
+ const internModel = require('../models/internModel')
+ const collegeModel = require('../models/collegeModel')
+//const { findOne } = require('../models/collegeModel')
 const emailValidator = require('email-validator')
 const { isValidString , nameValidation , mobileValidation } = require('../Validator/validator')
 
 const createIntern = async function(req , res){
-
+    res.setHeader('Access-Control-Allow-Origin','*')
     try {
-    
     let bodyData = req.body
+    console.log(bodyData);
     let { name, email, mobile, collegeName } = bodyData
 
     if(!name) return res.status(400).send({ status: false, message: "Name is required !!!" })
@@ -44,3 +45,17 @@ const createIntern = async function(req , res){
 }}
 
 module.exports = { createIntern }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
